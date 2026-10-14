@@ -103,7 +103,7 @@
       color: #fff;
     }
 
-    /* Hero Banner with Big Logo */
+    /* Hero Banner */
     .hero {
       text-align: center;
       padding: 2.2rem 1rem 1.4rem;
@@ -153,7 +153,6 @@
       flex: 1;
     }
 
-    /* Ultra Fast Loader */
     .loader-container {
       display: flex;
       flex-direction: column;
@@ -176,7 +175,6 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Empty Catalog Message */
     .empty-catalog {
       text-align: center;
       padding: 4.5rem 1rem;
@@ -191,14 +189,12 @@
       margin-bottom: 1rem;
     }
 
-    /* Product Grid */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
       gap: 1.4rem;
     }
 
-    /* Card */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -215,7 +211,6 @@
       border-color: #f59e0b;
     }
 
-    /* Image Carousel */
     .card-img-wrap {
       width: 100%;
       height: 240px;
@@ -229,7 +224,6 @@
       height: 100%;
       object-fit: contain;
       display: block;
-      transition: opacity 0.2s;
     }
 
     .img-dots {
@@ -366,7 +360,6 @@
       font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
-      transition: background 0.2s;
       text-align: center;
     }
 
@@ -462,11 +455,6 @@
       font-size: 0.88rem;
     }
 
-    .form-control:focus {
-      outline: none;
-      border-color: #f59e0b;
-    }
-
     .btn-submit {
       width: 100%;
       padding: 0.75rem;
@@ -480,9 +468,18 @@
       margin-top: 0.6rem;
     }
 
-    .btn-submit:hover {
-      background: #d97706;
+    .btn-cancel {
+      width: 100%;
+      padding: 0.6rem;
+      background: #475569;
+      border: none;
+      border-radius: 6px;
       color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-top: 0.4rem;
+      display: none;
     }
 
     .order-summary-box {
@@ -492,6 +489,75 @@
       border-radius: 6px;
       margin-bottom: 1rem;
       font-size: 0.88rem;
+    }
+
+    /* Admin Product Management List */
+    .admin-inventory {
+      margin-top: 1.5rem;
+      border-top: 1px solid #23314e;
+      padding-top: 1.2rem;
+    }
+
+    .inventory-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #090d16;
+      border: 1px solid #23314e;
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .inventory-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .inventory-img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 4px;
+      flex-shrink: 0;
+      background: #1e293b;
+    }
+
+    .inventory-text {
+      font-size: 0.82rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
+
+    .inventory-btns {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .btn-inv-edit {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      padding: 5px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .btn-inv-del {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      padding: 5px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
     }
 
     footer {
@@ -527,13 +593,11 @@
 
   <!-- Catalog Section -->
   <div class="container">
-    <!-- Fast Loader -->
     <div id="loader" class="loader-container">
       <div class="spinner"></div>
       <p style="color: var(--text-muted); font-size: 0.88rem;">Loading live catalog...</p>
     </div>
 
-    <!-- Empty State -->
     <div id="emptyCatalog" class="empty-catalog">
       <svg viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
       <h2 style="font-size: 1.25rem; font-weight: 700;">Catalog is Currently Empty</h2>
@@ -564,13 +628,15 @@
     </div>
   </div>
 
-  <!-- Store Management Console (Add Product) -->
+  <!-- Store Management Console -->
   <div class="modal" id="adminModal">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 style="font-size: 1.15rem; font-weight: 700;">Store Management Console</h3>
+        <h3 style="font-size: 1.15rem; font-weight: 700;" id="adminModalHeading">Store Management Console</h3>
         <button class="modal-close" onclick="closeModal('adminModal')">&times;</button>
       </div>
+
+      <input type="hidden" id="editProductId" value="">
 
       <div class="form-group">
         <label>Product Title *</label>
@@ -582,9 +648,8 @@
         <input type="text" id="pCategory" class="form-control" placeholder="e.g. Perfumes, Jewelry, Men's Fashion">
       </div>
 
-      <!-- Multiple Gallery Image Upload -->
       <div class="form-group">
-        <label>Choose Images from Gallery (Select Multiple) *</label>
+        <label>Choose Images from Gallery (Select Multiple)</label>
         <input type="file" id="pFiles" class="form-control" accept="image/*" multiple>
       </div>
 
@@ -635,6 +700,14 @@
       </div>
 
       <button class="btn-submit" id="saveProductBtn" onclick="saveNewProduct()">Publish To Live Cloud Catalog 🚀</button>
+      <button class="btn-cancel" id="cancelEditBtn" onclick="resetAdminForm()">Cancel Edit</button>
+
+      <!-- Manage Existing Products -->
+      <div class="admin-inventory">
+        <h4 style="font-size: 0.95rem; margin-bottom: 0.8rem; color: #f8fafc;">📦 Manage Existing Listings (<span id="totalProductsCount">0</span>)</h4>
+        <div id="adminInventoryList"></div>
+      </div>
+
     </div>
   </div>
 
@@ -666,12 +739,12 @@
       <div class="form-group">
         <label>Preferred Payment Mode *</label>
         <select id="cPayment" class="form-control">
+          <option value="UPI / Online Payment">Pay via UPI (GPay/PhonePe/Paytm) ⚡</option>
           <option value="Cash on Delivery (COD)">Cash on Delivery (COD) 📦</option>
-          <option value="UPI / Online Payment">Pay via UPI (9382948906-2@ybl) ⚡</option>
         </select>
       </div>
 
-      <button class="btn-submit" onclick="submitDirectOrder()">Confirm & Send on WhatsApp 📲</button>
+      <button class="btn-submit" onclick="submitDirectOrder()">Proceed to Complete Order 🚀</button>
     </div>
   </div>
 
@@ -683,7 +756,6 @@
       adminPass: "Sayan@21"
     };
 
-    // Official Firebase Credentials
     const firebaseConfig = {
       apiKey: "AIzaSyDnb3m2v0OGLRURHfa_MUHUbONBjODgiAA",
       authDomain: "budget-basket-728d1.firebaseapp.com",
@@ -694,7 +766,6 @@
       appId: "1:45434239629:web:5f5e25efe701bff1bb40c4"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
     const productsRef = database.ref('products');
@@ -713,6 +784,7 @@
       if (!data) {
         currentProductsList = [];
         emptyState.style.display = 'block';
+        renderAdminInventory();
         return;
       }
 
@@ -721,6 +793,8 @@
         id: key,
         ...data[key]
       })).reverse();
+
+      renderAdminInventory();
 
       currentProductsList.forEach((p, idx) => {
         const card = document.createElement("div");
@@ -778,7 +852,6 @@
       console.error("Firebase Database error:", error);
     });
 
-    // Image switcher
     function switchImage(cardIdx, imgIdx) {
       const p = currentProductsList[cardIdx];
       if (p && p.images && p.images[imgIdx]) {
@@ -788,13 +861,15 @@
       }
     }
 
-    // Modal controls
     function openLoginModal() {
       document.getElementById("loginModal").style.display = "flex";
     }
 
     function closeModal(id) {
       document.getElementById(id).style.display = "none";
+      if (id === 'adminModal') {
+        resetAdminForm();
+      }
     }
 
     function verifyAdmin() {
@@ -803,12 +878,12 @@
         closeModal("loginModal");
         document.getElementById("adminPassInput").value = "";
         document.getElementById("adminModal").style.display = "flex";
+        renderAdminInventory();
       } else {
         alert("Incorrect Admin Password!");
       }
     }
 
-    // Compress image file to base64
     function compressImageFile(file) {
       return new Promise((resolve) => {
         const reader = new FileReader();
@@ -833,8 +908,9 @@
       });
     }
 
-    // Save product to Firebase
+    // Save or Update Product in Firebase
     async function saveNewProduct() {
+      const editId = document.getElementById("editProductId").value;
       const title = document.getElementById("pTitle").value.trim();
       const category = document.getElementById("pCategory").value.trim();
       const price = document.getElementById("pPrice").value.trim();
@@ -853,7 +929,7 @@
       }
 
       const saveBtn = document.getElementById("saveProductBtn");
-      saveBtn.innerText = "Uploading to Cloud Database...";
+      saveBtn.innerText = "Saving to Cloud...";
       saveBtn.disabled = true;
 
       let images = [];
@@ -870,15 +946,22 @@
         images = images.concat(manualUrls);
       }
 
+      // If editing and no new images selected, keep previous images
+      if (editId && images.length === 0) {
+        const existing = currentProductsList.find(item => item.id === editId);
+        if (existing && existing.images) {
+          images = existing.images;
+        }
+      }
+
       if (images.length === 0) {
-        alert("Please select at least 1 image from gallery or enter an image URL.");
-        saveBtn.innerText = "Publish To Live Cloud Catalog 🚀";
+        alert("Please select at least 1 image or enter an image URL.");
+        saveBtn.innerText = editId ? "Update Product Listing 💾" : "Publish To Live Cloud Catalog 🚀";
         saveBtn.disabled = false;
         return;
       }
 
-      const newProductRef = productsRef.push();
-      newProductRef.set({
+      const productPayload = {
         title,
         category,
         images,
@@ -889,28 +972,117 @@
         badge,
         soldOut,
         desc,
-        createdAt: Date.now()
-      }).then(() => {
-        closeModal("adminModal");
-        document.getElementById("pTitle").value = "";
-        document.getElementById("pCategory").value = "";
-        document.getElementById("pPrice").value = "";
-        document.getElementById("pMrp").value = "";
-        document.getElementById("pSizes").value = "";
-        document.getElementById("pColors").value = "";
-        document.getElementById("pBadge").value = "";
-        document.getElementById("pDesc").value = "";
-        document.getElementById("pUrls").value = "";
-        document.getElementById("pFiles").value = "";
+        updatedAt: Date.now()
+      };
 
-        saveBtn.innerText = "Publish To Live Cloud Catalog 🚀";
-        saveBtn.disabled = false;
-        alert("Product published to Firebase! It is now live on every phone.");
-      }).catch((err) => {
-        saveBtn.innerText = "Publish To Live Cloud Catalog 🚀";
-        saveBtn.disabled = false;
-        alert("Upload error: " + err.message);
+      if (editId) {
+        // Update existing item
+        productsRef.child(editId).update(productPayload).then(() => {
+          alert("Product listing updated successfully! ✅");
+          resetAdminForm();
+        }).catch((err) => {
+          alert("Update error: " + err.message);
+        }).finally(() => {
+          saveBtn.disabled = false;
+        });
+      } else {
+        // Push new item
+        productPayload.createdAt = Date.now();
+        productsRef.push(productPayload).then(() => {
+          alert("Product published to Firebase! It is now live on every phone 🚀");
+          resetAdminForm();
+        }).catch((err) => {
+          alert("Upload error: " + err.message);
+        }).finally(() => {
+          saveBtn.disabled = false;
+        });
+      }
+    }
+
+    // Render Admin Inventory for Edit/Delete
+    function renderAdminInventory() {
+      const container = document.getElementById("adminInventoryList");
+      if (!container) return;
+      document.getElementById("totalProductsCount").innerText = currentProductsList.length;
+      container.innerHTML = "";
+
+      currentProductsList.forEach((p) => {
+        const thumb = (p.images && p.images[0]) || "https://via.placeholder.com/40";
+        const div = document.createElement("div");
+        div.className = "inventory-item";
+        div.innerHTML = `
+          <div class="inventory-info">
+            <img src="${thumb}" class="inventory-img">
+            <div>
+              <div class="inventory-text">${p.title}</div>
+              <div style="font-size: 0.75rem; color: #10b981; font-weight:700;">₹${p.price}</div>
+            </div>
+          </div>
+          <div class="inventory-btns">
+            <button class="btn-inv-edit" onclick="startEditProduct('${p.id}')">✏️ Edit</button>
+            <button class="btn-inv-del" onclick="deleteProductById('${p.id}', '${p.title.replace(/'/g, "\\'")}')">🗑️</button>
+          </div>
+        `;
+        container.appendChild(div);
       });
+    }
+
+    // Start Editing
+    function startEditProduct(id) {
+      const p = currentProductsList.find(item => item.id === id);
+      if (!p) return;
+
+      document.getElementById("editProductId").value = id;
+      document.getElementById("pTitle").value = p.title;
+      document.getElementById("pCategory").value = p.category || "";
+      document.getElementById("pPrice").value = p.price;
+      document.getElementById("pMrp").value = p.mrp || "";
+      document.getElementById("pSizes").value = p.sizes || "";
+      document.getElementById("pColors").value = p.colors || "";
+      document.getElementById("pBadge").value = p.badge || "";
+      document.getElementById("pSoldOut").value = String(p.soldOut);
+      document.getElementById("pDesc").value = p.desc || "";
+
+      document.getElementById("adminModalHeading").innerText = "✏️ Edit Product Listing";
+      document.getElementById("saveProductBtn").innerText = "Update Product Listing 💾";
+      document.getElementById("saveProductBtn").style.background = "#2563eb";
+      document.getElementById("saveProductBtn").style.color = "#fff";
+      document.getElementById("cancelEditBtn").style.display = "block";
+
+      document.querySelector('#adminModal .modal-box').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Delete Product from Firebase
+    function deleteProductById(id, title) {
+      if (confirm(`Are you sure you want to delete "${title}" permanently?`)) {
+        productsRef.child(id).remove().then(() => {
+          alert("Product deleted successfully! 🗑️");
+          resetAdminForm();
+        }).catch((err) => {
+          alert("Delete error: " + err.message);
+        });
+      }
+    }
+
+    // Reset Admin Form
+    function resetAdminForm() {
+      document.getElementById("editProductId").value = "";
+      document.getElementById("pTitle").value = "";
+      document.getElementById("pCategory").value = "";
+      document.getElementById("pPrice").value = "";
+      document.getElementById("pMrp").value = "";
+      document.getElementById("pSizes").value = "";
+      document.getElementById("pColors").value = "";
+      document.getElementById("pBadge").value = "";
+      document.getElementById("pDesc").value = "";
+      document.getElementById("pUrls").value = "";
+      document.getElementById("pFiles").value = "";
+
+      document.getElementById("adminModalHeading").innerText = "Store Management Console";
+      document.getElementById("saveProductBtn").innerText = "Publish To Live Cloud Catalog 🚀";
+      document.getElementById("saveProductBtn").style.background = "#f59e0b";
+      document.getElementById("saveProductBtn").style.color = "#000";
+      document.getElementById("cancelEditBtn").style.display = "none";
     }
 
     // Direct Buy Workflow
@@ -936,6 +1108,8 @@
         return;
       }
 
+      const isUPI = paymentMode.includes("UPI");
+
       const msg = encodeURIComponent(
         `🛍️ *NEW ORDER - BUDGET BASKET*\n\n` +
         `*Product:* ${selectedProductForOrder.title}\n` +
@@ -948,10 +1122,24 @@
         `Please confirm my order and send tracking details.`
       );
 
-      const url = `https://wa.me/${STORE_CONFIG.whatsapp}?text=${msg}`;
-      window.open(url, "_blank");
-      closeModal("checkoutModal");
+      const waUrl = `https://wa.me/${STORE_CONFIG.whatsapp}?text=${msg}`;
 
+      if (isUPI) {
+        // Direct UPI Deep-link to open PhonePe / GPay / Paytm
+        const payeeName = encodeURIComponent(STORE_CONFIG.name);
+        const note = encodeURIComponent("Order: " + selectedProductForOrder.title.substring(0, 20));
+        const upiUrl = `upi://pay?pa=${STORE_CONFIG.upi}&pn=${payeeName}&am=${selectedProductForOrder.price}&cu=INR&tn=${note}`;
+
+        // Send WhatsApp order details and trigger UPI app
+        window.open(waUrl, "_blank");
+        setTimeout(() => {
+          window.location.href = upiUrl;
+        }, 800);
+      } else {
+        window.open(waUrl, "_blank");
+      }
+
+      closeModal("checkoutModal");
       document.getElementById("cName").value = "";
       document.getElementById("cPhone").value = "";
       document.getElementById("cAddress").value = "";
